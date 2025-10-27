@@ -1,0 +1,23 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Composer
+/vendor/
+
+# Tailwind build (kan genbygges)
+public/assets/css/tailwind.css
+
+# Environment & config
+/config/config.php
+
+# Systemfiler
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+*.log
