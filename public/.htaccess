@@ -1,0 +1,13 @@
+# Simpel setup – brug query param ?page=home (ingen fancy routing nødvendig)
+DirectoryIndex index.php
+Options -Indexes
+
+# Caching af statiske filer (kan justeres)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png  "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>
