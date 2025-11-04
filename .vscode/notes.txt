@@ -1,0 +1,21 @@
+dwp/
+├─ public/
+│  ├─ index.php
+│  └─ .htaccess
+├─ app/
+│  └─ Views/
+│     ├─ partials/
+│     │  ├─ header.php
+│     │  └─ footer.php
+│     ├─ home.php
+│     └─ 404.php
+├─ assets/
+│  └─ css/
+│     └─ style.css
+├─ config/
+│  ├─ config.php
+│  └─ routes.php
+└─ includes/
+   ├─ helpers.php
+   └─ security.php
+```
