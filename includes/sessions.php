@@ -63,6 +63,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
   $member['email']     = trim($_POST['email']     ?? '');
   $member['password']  = (string)($_POST['password'] ?? '');
   $confirm             = (string)($_POST['confirm']  ?? '');
+  $member['DOB']       = $_POST['DOB']   ?? null;  // forventer 'YYYY-MM-DD' eller tom
+  $member['gender']    = $_POST['gender']?? null;  // 'M'/'F'/'U' (1 tegn)
 
   // 2) Valider (brug din validate-class)
   $errors['firstName'] = validate::isText($member['firstName'], 2, 50) ? '' : 'Fornavn skal være mellem 2 og 50 tegn.';
@@ -105,15 +107,21 @@ function sessions_create_member(array $member): array {
 
     $hash = password_hash($member['password'], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (first_name, last_name, email, password_hash, created_at)
-            VALUES (:fn, :ln, :em, :ph, NOW())";
+    // Map optional fields
+    $dob = !empty($member['DOB']) ? $member['DOB'] : null;       // allow NULL
+    $gender = !empty($member['gender']) ? $member['gender'] : 'U'; // default Unknown
+
+    $sql = "INSERT INTO user (firstName, lastName, DOB, email, password, gender)
+            VALUES (:fn, :ln, :dob, :em, :ph, :gender)";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-      ':fn' => $member['firstName'],
-      ':ln' => $member['lastName'],
-      ':em' => $member['email'],
-      ':ph' => $hash,
+      ':fn'     => $member['firstName'],
+      ':ln'     => $member['lastName'],
+      ':dob'    => $dob,      // null or 'YYYY-MM-DD'
+      ':em'     => $member['email'],
+      ':ph'     => $hash,
+      ':gender' => $gender,   // 'M' | 'F' | 'U' (1 char)
     ]);
 
     return ['ok' => true, 'id' => (int)$pdo->lastInsertId()];

@@ -10,6 +10,17 @@
       <input name="lastName" value="<?= e($member['lastName']) ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <?php if ($errors['lastName']) echo '<div class="err">'.e($errors['lastName']).'</div>'; ?>
     </label>
+    <label>Fødselsdato
+  <input type="date" name="DOB">
+</label>
+
+<label>Køn
+  <select name="gender">
+    <option value="U">Uoplyst</option>
+    <option value="F">F</option>
+    <option value="M">M</option>
+  </select>
+</label>
     <label>Email
       <input name="email" type="email" value="<?= e($member['email']) ?>" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <?php if ($errors['email']) echo '<div class="err">'.e($errors['email']).'</div>'; ?>
