@@ -1,99 +1,114 @@
-<main class="user-main container" style="padding:40px 20px;">
-  <header class="user-head">
-    <div class="user-avatar" aria-hidden="true">
-      <?php
-        $nm = $_SESSION['member_name'] ?? '';
-        $initials = '';
-        if ($nm) {
-          $parts = preg_split('/\s+/', trim($nm));
-          $initials = strtoupper(mb_substr($parts[0] ?? '', 0, 1) . mb_substr(end($parts) ?: '', 0, 1));
-        }
-        echo $initials ?: 'U';
-      ?>
-    </div>
-    <div>
-      <h1 style="margin:0 0 6px;">Hej <?= e($_SESSION['member_name'] ?? 'CineMagic gæst') ?></h1>
-      <p class="muted" style="margin:0;"><?= e($_SESSION['member_email'] ?? 'Log ind for at se dine oplysninger') ?></p>
-    </div>
-    <div class="user-head__actions">
-      <a class="btn btn--ghost" href="<?= url('?page=login') ?>">Log ind</a>
-      <a class="btn btn--primary" href="<?= url('?page=register') ?>">Opret bruger</a>
-    </div>
-  </header>
+<main class="profile">
+  <div class="wrap">
+    <?php
+      $name  = $_SESSION['member_name']  ?? '';
+      $email = $_SESSION['member_email'] ?? '';
+      $isLogged = !empty($name) || !empty($email);
+      // Initialer
+      $initials = 'U';
+      if ($name) {
+        $parts = preg_split('/\s+/', trim($name));
+        $first = mb_substr($parts[0] ?? '', 0, 1);
+        $last  = mb_substr(($parts && end($parts)) ? end($parts) : '', 0, 1);
+        $cand  = strtoupper(($first ?: '') . ($last ?: ''));
+        if ($cand) { $initials = $cand; }
+      }
+    ?>
 
-  <section class="user-grid">
-    <!-- Profilkort -->
-    <article class="user-card">
-      <h2>Konto</h2>
-      <div class="user-fields">
-        <div>
-          <div class="label">Navn</div>
-          <div class="value"><?= e($_SESSION['member_name'] ?? '—') ?></div>
-        </div>
-        <div>
-          <div class="label">Email</div>
-          <div class="value"><?= e($_SESSION['member_email'] ?? '—') ?></div>
-        </div>
+    <!-- Header -->
+    <section class="p-header p-card">
+      <div class="p-avatar" aria-hidden="true"><?= e($initials) ?></div>
+      <div class="p-title">
+        <h1>Hej <?= e($name ?: 'CineMagic gæst') ?></h1>
+        <p><?= e($email ?: 'Log ind for at se dine oplysninger') ?></p>
       </div>
-      <div class="user-actions">
-        <a class="btn btn--ghost" href="#">Redigér profil</a>
-        <a class="btn btn--ghost" href="#">Skift adgangskode</a>
+      <div class="p-actions">
+        <?php if ($isLogged): ?>
+         
+          <a class="btn btn--primary" href="<?= url('?page=home#today') ?>">Køb billetter</a>
+        <?php else: ?>
+          <a class="btn btn--ghost" href="<?= url('?page=login') ?>">Log ind</a>
+          <a class="btn btn--primary" href="<?= url('?page=register') ?>">Opret bruger</a>
+        <?php endif; ?>
       </div>
-    </article>
+    </section>
 
-    <!-- Hurtige tal / status  -->
-    <article class="user-card">
-      <h2>Dine billetter</h2>
-      <div class="stats">
-        <div class="stat"><div class="stat__num">0</div><div class="stat__label">Aktive</div></div>
-        <div class="stat"><div class="stat__num">0</div><div class="stat__label">Kommende</div></div>
-        <div class="stat"><div class="stat__num">0</div><div class="stat__label">Tidligere</div></div>
-      </div>
-      <p class="muted small">Her kan du senere se og administrere dine bookinger.</p>
-    </article>
-
-    <!-- Seneste bookinger (placeholder) -->
-    <article class="user-card user-card--span2">
-      <h2>Seneste bookinger</h2>
-      <div class="list" role="list" style="margin-top:10px;">
-        <div class="row" role="listitem">
-          <div>
-            <div class="title">Ingen bookinger endnu</div>
-            <div class="meta">Når du køber billetter, dukker de op her.</div>
+    <!-- Content grid -->
+    <section class="p-grid">
+      <!-- Left column: Account + Bookings -->
+      <div class="stack" style="display:grid; gap:18px;">
+        <article class="p-card">
+          <div class="p-card__body">
+            <h2>Konto</h2>
+            <div class="kv">
+              <div class="row"><div class="label">Navn</div><div class="value"><?= e($name ?: '—') ?></div></div>
+              <div class="row"><div class="label">Email</div><div class="value"><?= e($email ?: '—') ?></div></div>
+            </div>
+            
           </div>
-          <div class="row__format">—</div>
-          <div class="row__time">—</div>
-        </div>
-      </div>
-      <div class="user-actions">
-        <a class="btn btn--primary" href="<?= url('?page=home#today') ?>">Find forestillinger</a>
-      </div>
-    </article>
+        </article>
 
-    <!-- Præferencer (dummy form klar til backend) -->
-    <article class="user-card user-card--span2">
-      <h2>Præferencer</h2>
-      <form method="post" action="#" class="pref-form">
-        <?= csrf_input() ?>
-        <div class="pref-grid">
-          <label>
-            Foretrukket sprog<br>
-            <select name="pref_lang">
-              <option value="auto">Auto</option>
-              <option>Dansk</option>
-              <option>Engelsk</option>
-            </select>
-          </label>
-          <label>
-            Notifikationer<br>
-            <select name="pref_notif">
-              <option value="email">Email</option>
-              <option value="none">Ingen</option>
-            </select>
-          </label>
-        </div>
-        <button class="btn btn--ghost" type="submit">Gem præferencer</button>
-      </form>
-    </article>
-  </section>
+        <article class="p-card">
+          <div class="p-card__body">
+            <h2>Seneste bookinger</h2>
+            <?php /* Placeholder — kan udskiftes med rigtig liste */ ?>
+            <div class="list" role="list" style="margin-top:10px;">
+              <div class="row" role="listitem">
+                <div>
+                  <div class="title">Ingen bookinger endnu</div>
+                  <div class="meta">Når du køber billetter, dukker de op her.</div>
+                </div>
+                <div class="row__format">—</div>
+                <div class="row__time">—</div>
+              </div>
+            </div>
+            <div style="margin-top:12px;">
+              <a class="btn btn--primary" href="<?= url('?page=home#today') ?>">Find forestillinger</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Right column: Stats + Preferences -->
+      <div class="stack" style="display:grid; gap:18px;">
+        <article class="p-card">
+          <div class="p-card__body">
+            <h2>Din status</h2>
+            <div class="stats">
+              <div class="stat"><div class="stat__num">0</div><div class="stat__label">Aktive</div></div>
+              <div class="stat"><div class="stat__num">0</div><div class="stat__label">Kommende</div></div>
+              <div class="stat"><div class="stat__num">0</div><div class="stat__label">Tidligere</div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="p-card">
+          <div class="p-card__body">
+            <h2>Præferencer</h2>
+            <form method="post" action="#" class="pref-form">
+              <?= csrf_input() ?>
+              <div class="pref-grid">
+                <label>
+                  Foretrukket sprog<br>
+                  <select name="pref_lang">
+                    <option value="auto">Auto</option>
+                    <option <?= !empty($_SESSION['pref_lang']) && $_SESSION['pref_lang']==='Dansk' ? 'selected' : '' ?>>Dansk</option>
+                    <option <?= !empty($_SESSION['pref_lang']) && $_SESSION['pref_lang']==='Engelsk' ? 'selected' : '' ?>>Engelsk</option>
+                  </select>
+                </label>
+                <label>
+                  Notifikationer<br>
+                  <select name="pref_notif">
+                    <option value="email" <?= (($_SESSION['pref_notif'] ?? 'email')==='email') ? 'selected' : '' ?>>Email</option>
+                    <option value="none"  <?= (($_SESSION['pref_notif'] ?? 'email')==='none')  ? 'selected' : '' ?>>Ingen</option>
+                  </select>
+                </label>
+              </div>
+              <button class="btn btn--ghost" type="submit">Gem præferencer</button>
+            </form>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
 </main>

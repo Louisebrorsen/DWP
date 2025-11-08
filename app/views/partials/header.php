@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= e($SITE['name']) ?> – Biograf</title>
   <meta name="description" content="<?= e($SITE['description']) ?>" />
-  <link rel="stylesheet" href="<?= asset(path: '/../assets/css/style.css') ?>">
+  <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
 </head>
 <body>
   <header>
@@ -21,7 +21,11 @@
         <a href="#coming">Kommende</a>
         <a href="#about">Om os</a>
         <a href="#contact">Kontakt</a>
-        <a href="<?= url('?page=login') ?>">Login</a>
+        <?php if (!empty($_SESSION['member_email'])): ?>
+          <a href="<?= url('?page=logout') ?>">Log ud</a>
+        <?php else: ?>
+          <a href="<?= url('?page=login') ?>">Login</a>
+        <?php endif; ?>
       </nav>
 
       <details class="navdrop">
@@ -32,7 +36,11 @@
           <a role="menuitem" href="#coming">Kommende</a>
           <a role="menuitem" href="#about">Om os</a>
           <a role="menuitem" href="#contact">Kontakt</a>
-          <a role="menuitem" href="<?= url('?page=login') ?>">Login</a>
+          <?php if (!empty($_SESSION['member_email'])): ?>
+            <a role="menuitem" href="<?= url('?page=logout') ?>">Log ud</a>
+          <?php else: ?>
+            <a role="menuitem" href="<?= url('?page=login') ?>">Login</a>
+          <?php endif; ?>
         </div>
       </details>
     </div>

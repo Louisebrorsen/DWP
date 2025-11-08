@@ -1,4 +1,12 @@
 <?php require_once __DIR__ . '/../../includes/sessions.php'; ?>
+<?php
+// Redirect to profile when registration succeeds (must run before any HTML output)
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && !empty($result['ok'])) {
+    $dest = function_exists('url') ? url('?page=profile') : '?page=profile';
+    header('Location: ' . $dest);
+    exit;
+}
+?>
 <main class="container" style="max-width:520px;margin:auto;padding:24px;">
   <h1>Opret bruger</h1>
   <form method="post" style="display:grid;gap:12px;">

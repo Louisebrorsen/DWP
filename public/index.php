@@ -11,6 +11,23 @@ $routes = require __DIR__ . '/../config/routes.php';
 // Vælg side
 $page = $_GET['page'] ?? 'home';
 $page = preg_replace('/[^a-z0-9_-]/i', '', $page); // simpel sanitizing
+// Handle logout early (no output yet)
+if ($page === 'logout') {
+  if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+  // Clear session array
+  $_SESSION = [];
+  // Remove session cookie
+  if (ini_get('session.use_cookies')) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+  }
+  // Destroy session
+  session_destroy();
+  // Redirect to home
+  $dest = function_exists('url') ? url('?page=home') : '/';
+  header('Location: ' . $dest);
+  exit;
+}
 
 $view = $routes[$page] ?? ($page === 'home' || $page === '' ? 'home' : '404');
 
