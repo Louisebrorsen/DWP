@@ -32,7 +32,7 @@
           <a role="menuitem" href="#coming">Kommende</a>
           <a role="menuitem" href="#about">Om os</a>
           <a role="menuitem" href="#contact">Kontakt</a>
-          <a role="menuitem" href="<?= url('?page=login') ?>">Opret bruger</a>
+          <a role="menuitem" href="<?= url('?page=login') ?>">Login</a>
         </div>
       </details>
     </div>

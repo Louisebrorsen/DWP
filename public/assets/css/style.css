@@ -172,3 +172,44 @@
   margin-inline: auto;        /* Centrer boksen på siden */
   text-align: left;           /* Behold venstrejusteret tekst */
 }
+
+
+/* ===== Kontaktformular ===== */
+/* === Fix kontaktlayout (centreret + fuld bredde inputs) === */
+.contact {
+  display: flex;
+  justify-content: center;       /* centrer boksen vandret */
+  align-items: center;           /* centrer lodret (fjern hvis du ikke vil) */
+  min-height: 80vh;              /* så den ikke hænger oppe i toppen */
+  padding: 60px 20px;
+}
+
+.contact__container {
+  width: 100%;
+  max-width: 640px;              /* fast pæn bredde */
+  margin: 0 auto;                /* centrer container */
+  text-align: left;              /* behold venstrejusteret indhold */
+}
+
+.contact__form {
+  display: grid;
+  gap: 16px;
+}
+
+.form__group label {
+  display: block;                /* label over felt */
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form__group input,
+.form__group textarea {
+  display: block;
+  width: 100%;                   /* <<< vigtig: fuld bredde */
+  box-sizing: border-box;        /* inkluder padding i width */
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(0,0,0,.15);
+  color: inherit;
+}

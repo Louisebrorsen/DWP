@@ -121,6 +121,54 @@ $movies = movies_all(8); // hent de 8 nyeste film
       </div>
     </div>
   </section>
+
+  <section id="contact">
+    
+  <div class="contact__container">
+    <h1>Kontakt os</h1>
+    <p class="contact__intro">Har du spørgsmål til vores forestillinger, billetter eller arrangementer? Udfyld formularen nedenfor, så vender vi tilbage hurtigst muligt.</p>
+
+    <form action="/./includes/contact_actions.php" method="POST" class="contact__form">
+      <?= csrf_input() ?>
+
+      <div class="form__group">
+        <label for="name">Navn</label>
+        <input type="text" id="name" name="name" placeholder="Dit fulde navn" required>
+      </div>
+
+      <div class="form__group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="din@email.dk" required>
+      </div>
+
+      <div class="form__group">
+        <label for="subject">Emne</label>
+        <input type="text" id="subject" name="subject" placeholder="Hvad drejer henvendelsen sig om?" required>
+      </div>
+
+      <div class="form__group">
+        <label for="message">Besked</label>
+        <textarea id="message" name="message" rows="5" placeholder="Skriv din besked her..." required></textarea>
+      </div>
+
+      <div class="form__group">
+        <label>
+          <input type="checkbox" name="terms" value="true" required>
+          Jeg accepterer <a href="#">betingelserne</a>
+        </label>
+      </div>
+
+      <div class="form__group">
+        <label>
+          <input type="checkbox" name="subscribe" value="yes">
+          Tilmeld mig nyhedsbrevet
+        </label>
+      </div>
+
+      <button type="submit" name="submit" class="btn btn--primary">Send besked</button>
+    </form>
+  </div>
+</main>
   
 
 </main>
