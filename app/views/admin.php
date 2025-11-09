@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../config/bootstrap.php';
 $action = $_GET['action'] ?? 'list';
 $msg = null; $ok = false;
 

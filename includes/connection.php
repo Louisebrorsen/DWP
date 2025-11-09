@@ -5,7 +5,12 @@ function db(): PDO {
   if ($pdo) return $pdo; // Hvis forbindelsen allerede findes, brug den
 
   // Henter konstanter fra config.php
-  $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+  $host    = defined('DB_HOST') ? DB_HOST : '127.0.0.1';
+  $db      = defined('DB_NAME') ? DB_NAME : '';
+  $charset = defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4';
+  $port    = defined('DB_PORT') ? DB_PORT : 3306;
+
+  $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s', $host, $port, $db, $charset);
 
   // Indstillinger for PDO
   $options = [
@@ -19,7 +24,9 @@ function db(): PDO {
     return $pdo;
   } catch (PDOException $e) {
     // I udvikling kan du vise detaljer – i produktion bør du logge det i stedet
-    http_response_code(500);
+    if (!headers_sent()) {
+      http_response_code(500);
+    }
     exit('Database connection failed: ' . $e->getMessage());
   }
 }

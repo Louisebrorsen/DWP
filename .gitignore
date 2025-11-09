@@ -22,3 +22,7 @@ Thumbs.db
 # OS 
 *.log
 public/uploads/
+
+.env
+.env.local
+.env.*.local

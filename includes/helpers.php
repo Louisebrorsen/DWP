@@ -5,8 +5,11 @@ function e(string $str): string { return htmlspecialchars($str, ENT_FLAGS, 'UTF-
 
 // URL helpers
 function url(string $path = ''): string { return rtrim(BASE_URL . '/' . ltrim($path, '/'), '/'); }
-function asset(string $path): string { return url('assets/' . ltrim($path, '/')); }
-
+function asset($path) {
+    // Sørg for at alle assets hentes fra /assets/
+    $base = rtrim(BASE_URL, '/');
+    return $base . '/assets/' . ltrim($path, '/');
+}
 // Simple active‑link helper
 function nav_active(string $hashId): string {
   $q = $_GET['page'] ?? 'home';
