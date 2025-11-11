@@ -1,11 +1,36 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
-require_once INC_PATH . '/movies.php';
-require_once INC_PATH . '/admin_actions.php';
-require_once INC_PATH . '/showtimes.php';
-require_once INC_PATH . '/sessions.php';
-require_once INC_PATH . '/validate.php';
-$routes = require CONFIG_PATH . '/routes.php';
+
+$incFallback = __DIR__ . '/../includes';
+
+require_once (defined('INC_PATH') ? INC_PATH : $incFallback) . '/movies.php';
+require_once (defined('INC_PATH') ? INC_PATH : $incFallback) . '/admin_actions.php';
+require_once (defined('INC_PATH') ? INC_PATH : $incFallback) . '/showtimes.php';
+require_once (defined('INC_PATH') ? INC_PATH : $incFallback) . '/sessions.php';
+require_once (defined('INC_PATH') ? INC_PATH : $incFallback) . '/validate.php';
+
+// Extra guard for static analyzers and odd include orders:
+if (!function_exists('validate_login')) {
+    require_once __DIR__ . '/../includes/validate.php';
+}
+/**
+ * ---------- IDE helper (Intelephense) ----------
+ * If validate_login() is still not loaded after includes, declare a
+ * stub that always returns a bool so static analyzers are satisfied.
+ * This block only runs if the real function is missing.
+ */
+if (!function_exists('validate_login')) {
+    /**
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    function validate_login(string $username, string $password): bool {
+        return false;
+    }
+}
+
+$routes = require (defined('CONFIG_PATH') ? CONFIG_PATH : (__DIR__ . '/../config')) . '/routes.php';
 
 if (!function_exists('url')) {
   function url(string $path = ''): string {
@@ -15,6 +40,21 @@ if (!function_exists('url')) {
     $path   = ltrim($path, '/');
     return ($host ? "$scheme://$host" : '') . ($base ? "$base/" : '/') . $path;
   }
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['form'] ?? '') === 'login') {
+    if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $valid = validate_login($username, $password);
+    if ($valid) {
+        $_SESSION['user'] = $username;
+        $redirect = $_POST['redirect'] ?? url('?page=home');
+        header('Location: ' . $redirect);
+        exit;
+    } else {
+        $login_error = 'Invalid username or password';
+    }
 }
 
 // Vælg side

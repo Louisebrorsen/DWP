@@ -7,6 +7,12 @@ $tab = $_GET['tab'] ?? 'movies';
 $keyParam = isset($_GET['key']) ? '&key='.rawurlencode($_GET['key']) : ''; 
 ?>
 <main class="admin-main container" style="padding:40px 20px;">
+<?php if (!empty($_SESSION['message'])): ?>
+  <div style="margin:12px 0; padding:12px; border-radius:10px; background:#103f2c; color:#d7ffef;">
+    <?= e($_SESSION['message']) ?>
+  </div>
+  <?php unset($_SESSION['message']); ?>
+<?php endif; ?>
 <nav class="tabs">
   <a class="tablink <?= $tab==='movies' ? 'is-active' : '' ?>" href="<?= url('?page=admin&tab=movies'.$keyParam) ?>">Film</a>
   <a class="tablink <?= $tab==='rooms' ? 'is-active' : '' ?>" href="<?= url('?page=admin&tab=rooms'.$keyParam) ?>">Sale & sæder</a>
